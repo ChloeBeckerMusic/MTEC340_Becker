@@ -9,6 +9,6 @@
     
 </div>
 
-![Boolean Is Set](Becker_Assignment1_BooleanIsSet.jpg)
+![Boolean Is Set](/Images/Becker_Assignment1_BooleanIsSet.jpg)
 
-![Boolean Isn't Set](Becker_Assignment1_BooleanIsntSet.jpg)
+![Boolean Isn't Set](/Images/Becker_Assignment1_BooleanIsntSet.jpg)
