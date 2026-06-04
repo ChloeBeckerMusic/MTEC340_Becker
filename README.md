@@ -12,12 +12,8 @@
 <div align="center">
 
 #### Here is my screenshot of when the Boolean Is Set:
-
-![Boolean Is Set](/Images/Becker_Assignment1_BooleanIsSet.jpg)
-<img src="/Images/Becker_Assignment1_BooleanIsSet.jpg" width="200" height="100">
+<img src="/Images/Becker_Assignment1_BooleanIsSet.jpg" width="500" height="300">
 
 #### Here is my screenshot of when the Boolean Isn't Set:
-
-![Boolean Isn't Set](/Images/Becker_Assignment1_BooleanIsntSet.jpg)
-<img src="/Images/Becker_Assignment1_BooleanIsntSet.jpg" width="200" height="100">
+<img src="/Images/Becker_Assignment1_BooleanIsntSet.jpg" width="500" height="300">
 </div> 
