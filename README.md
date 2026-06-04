@@ -9,6 +9,11 @@
     
 </div>
 
+<div align="center">
+Here is my screenshot of when the Boolean Is Set: 
+</div> 
+
 ![Boolean Is Set](/Images/Becker_Assignment1_BooleanIsSet.jpg)
 
+## Here is my screenshot of when the Boolean Isn't Set:
 ![Boolean Isn't Set](/Images/Becker_Assignment1_BooleanIsntSet.jpg)
