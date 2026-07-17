@@ -33,7 +33,7 @@ public class BallBehavior : MonoBehaviour
     }
 
 
-    // -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------  UPDATE
 
 
     void Update()
@@ -43,7 +43,7 @@ public class BallBehavior : MonoBehaviour
     }
 
 
-    // -----------------------------------------------------------------------
+    // ----------------------------------------------------------------------- OnCollisionEnter2D
 
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -56,70 +56,68 @@ public class BallBehavior : MonoBehaviour
                 // Weighted sum using one-minus to calculate weights
                 Vector2 direction = _rb.linearVelocity * (1.0f - _paddleInfluence)
                                     + other.rigidbody.linearVelocity * _paddleInfluence;
-
+                
                 _rb.linearVelocity = _rb.linearVelocity.magnitude * direction.normalized * _speedIncrement;
             }
-           
+
+            // Load sound
             _source.clip = _paddleHit;
-            _source.Play();
-    
         }
         else
         {
-            //load sound
+            // Load sound
             _source.clip = _wallHit;
-            _source.Play();
         }
-
-        //randomize sound properties 
-    _source.pitch = Random.Range(0.9f, 1.1f);
-
-    _source.Play();
-
+        
+        // Randomize sound properties
+        _source.pitch = Random.Range(0.9f, 1.1f);
+        
+        // Play sound
+        _source.Play();
     }
 
 
-    // -----------------------------------------------------------------------
+    // ----------------------------------------------------------------------- OnTriggerEnter2D
 
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         GameBehavior.Instance.Score(
-             Mathf.Sign(transform.position.x) > 0 ? 1 : 2
-            );
-
-
-        //Load and play sound
+            Mathf.Sign(transform.position.x) > 0 ? 1 : 2
+        );
+        
+        // Load and play sound
         _source.clip = _scorePoint;
+        _source.pitch = 1.0f;
         _source.Play();
-
-        // The second argument of destroy (optional) is used to delay 
-        // the action by a given amount 
-
+        
+        // The second argument of Destroy (optional) is used to delay
+        // the action by a given amount
+        
         Destroy(gameObject, _source.clip.length);
     }
 
 
-    // -----------------------------------------------------------------------
+    // ----------------------------------------------------------------------- RESET BALL
 
 
     private void ResetBall()
     {
         _rb.linearVelocity = Vector2.zero;
-
-       transform.position = Vector3.zero;
-       // // You can use this line of code too instead of the above code:
-       // transform.position = new Vector3(0.0f, 0.0f, transform.position.z);
-
-       Vector2 direction = Random.insideUnitCircle.normalized;
-
-       if (Mathf.Abs(direction.y) > _steepnessThresholdY)
-       {
-           direction.y += _steepnessThresholdY * Mathf.Sign(direction.y);
-           direction.Normalize();   
-       }
         
-       _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
+        transform.position = Vector3.zero;
+        // transform.position = new Vector3(0.0f, 0.0f, transform.position.z);
+        
+        // Make sure that direction has a vector length of 1
+        Vector2 direction = Random.insideUnitCircle.normalized;
+
+        if (Mathf.Abs(direction.y) > _steepnessThresholdY)
+        {
+            direction.y -= _steepnessThresholdY * Mathf.Sign(direction.y);
+            direction.Normalize();
+        }
+        
+        _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
     }
 
 

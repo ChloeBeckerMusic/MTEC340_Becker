@@ -33,17 +33,26 @@ public class GameBehavior : MonoBehaviour
                // static means that hey this line of code belongs to the CLASS,
                // not to the instance-- there is only ONE instance
 
+// 000000000000000000000000000000000000000000000000000000000000000000000000000000000000 //
 
+
+// --------------------------------------------------------------------------------- AWAKE
     private void Awake()
     {
-        if (Instance == null) {
+        // Software Design Patterns
+        // Singleton Pattern: Enforces that there is only ever one class
+        // throughout the whole execution of the program
+        if (Instance == null)
+        {
             Instance = this;
-            Debug.Log("New instance initialized...");
-		
-            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
         }
     }
 
+// --------------------------------------------------------------------------------- START
     private void Start()
     {
         ResetGame();
@@ -52,6 +61,7 @@ public class GameBehavior : MonoBehaviour
         State = Utilities.GameState.Play;
     }
 
+// --------------------------------------------------------------------------------- UPDATE
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -63,37 +73,32 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
+// --------------------------------------------------------------------------------- RESET GAME
     private void ResetGame()
     {
         foreach (Player p in _players)
         {
-            if (p != null)
-            {
-                p.Score = 0;
-            }
-            else
-            {
-                Debug.LogError("A Player reference is missing in the Players array!");
-            }
+            p.Score = 0;
         }
 
         SpawnBall();
     }
 
-
+// --------------------------------------------------------------------------------- SPAWN BALL
     private void SpawnBall()
     {
         Instantiate(_ballPrefab);
 
     }
 
+// --------------------------------------------------------------------------------- SCORE
     public void Score(int playerNum)
     {
         _players[playerNum - 1].Score++;
         CheckWinner();
     }
 
-
+// --------------------------------------------------------------------------------- CHECK WINNER
     private void CheckWinner()
     {
         foreach (Player p in _players)
@@ -109,5 +114,8 @@ public class GameBehavior : MonoBehaviour
         Invoke(nameof(SpawnBall), _durationBetweenPoints);
 
     }
+
+// --------------------------------------------------------------------------------- DONE
+
 }
 
