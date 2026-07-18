@@ -39,18 +39,7 @@ _spriteRenderer = GetComponent<SpriteRenderer>();
             _direction = Vector3.up * Strength;
         }
         
-                                    // this would be useful if you were doing this on a touch screen:
-
-                                           // if (Input.touchCount > 0)
-                                           // {
-                                           // Touch touch = Input.GetTouch(0);
-                                           // if touch.phase == TouchPhase.Began)
-                                           //{
-                                           //   direction = Vector3.up * strength;
-                                           //}
-                                           // }
-
-       _direction.y += Gravity * Time.deltaTime;
+        _direction.y += Gravity * Time.deltaTime;
         transform.position += _direction * Time.deltaTime;
         
                                             // this makes sure that gravity is an acceleration
