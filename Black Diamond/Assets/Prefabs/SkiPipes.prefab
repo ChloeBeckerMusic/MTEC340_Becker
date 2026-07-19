@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8027617652629957180}
   m_Layer: 0
   m_Name: Score Area
-  m_TagString: Untagged
+  m_TagString: ScoreArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1fcc1d59215482b84e1c3cffd32bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pipes
+  speed: 5
 --- !u!1 &4289057611559811885
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +139,7 @@ GameObject:
   - component: {fileID: 3871431895481807928}
   m_Layer: 0
   m_Name: Chairlift
-  m_TagString: Untagged
+  m_TagString: Chairlift
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -276,7 +277,7 @@ GameObject:
   - component: {fileID: 2913401618685429437}
   m_Layer: 0
   m_Name: Rock Tower
-  m_TagString: Untagged
+  m_TagString: RockTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
