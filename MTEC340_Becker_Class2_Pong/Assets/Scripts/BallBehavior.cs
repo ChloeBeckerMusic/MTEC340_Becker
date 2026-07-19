@@ -61,8 +61,9 @@ public class BallBehavior : MonoBehaviour
             }
 
             // Load sound
-            _source.clip = _paddleHit;
+            _source.clip = _paddleHit;      
         }
+
         else
         {
             // Load sound
