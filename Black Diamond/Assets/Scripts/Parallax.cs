@@ -6,8 +6,6 @@ public class Parallax : MonoBehaviour
     [SerializeField] private float _animationSpeed = 1f;
 
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-
-
 // --------------------------------------------------------------------------------------------- AWAKE
 
     private void Awake()
@@ -22,6 +20,7 @@ public class Parallax : MonoBehaviour
         _meshRenderer.material.mainTextureOffset += new Vector2(_animationSpeed * Time.deltaTime, 0);
                                         // meshRenderer is talking about the backgroundQuad
                                         // offset is what is moving it right to left
+        
     }
 
 

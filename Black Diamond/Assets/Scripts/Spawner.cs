@@ -11,7 +11,6 @@ public class Spawner : MonoBehaviour
 
 
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-
 // --------------------------------------------------------------------------------------------- ON ENABLE
 
     private void OnEnable()
@@ -32,11 +31,11 @@ InvokeRepeating(nameof(Spawn), SpawnRate, SpawnRate);
 
     private void Spawn()
     {
-        GameObject _skiPipes = Instantiate(prefab, transform.position, Quaternion.identity);     
+        GameObject skiPipes = Instantiate(prefab, transform.position, Quaternion.identity);     
                                         // yo-- every time I invoke spawn, I want you to instantiate my prefab
                                         // at a position, with no rotation (Quaternion.identity)
 
-        _skiPipes.transform.position += Vector3.up * Random.Range(MinHeight, MaxHeight);
+        skiPipes.transform.position += Vector3.up * Random.Range(MinHeight, MaxHeight);
     }                                   // remember when I invoked spawn? Yeah, I want you to get a random value
                                         // by multiplying our min/max height (-1 to 1 for fractions duh) along the 
                                         // y-axis but let's say Vector3.up -- cool so now I want you to make our 
