@@ -1,41 +1,46 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Timeline;
 
 public class GameBehavior : MonoBehaviour
 {
+
+    public static GameBehavior Instance { get; private set; }
+
+    [SerializeField] private TMP_Text _message;
+    private float _durationBetweenPoints = 0.3f;
+
+
     
- public static GameBehavior Instance;
- private Utilities.GameState _state;
 
- public Utilities.GameState State
- {
-     get => _state;
+    public Player currentPlayer;
+    public GameObject playerPrefab;
+    [SerializeField] private Spawner _spawner;
+    [SerializeField] private GameObject _playButton;
+    [SerializeField] private GameObject _gameOver;
+
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _skiFenceHit;
  
-     set
-     {
-         _state = value;
-
-         _message.enabled = State == Utilities.GameState.Pause;
-     }
-
- }
+    [SerializeField] private TextMeshProUGUI _scoreTextUI;
+    private int _score;
 
 
- [SerializeField] private TMP_Text _message;
- private float _durationBetweenPoints = 0.3f;
+    private Utilities.GameState _state; 
+    public Utilities.GameState State
+         {
+             get => _state;
+         
+             set
+             {
+                 _state = value;
+                 _message.enabled = State == Utilities.GameState.Pause;
+             }
 
-
- [SerializeField] private AudioSource _audioSource;
- [SerializeField] private AudioClip _skiFenceHit;
-
- private GameObject _currentPlayer;
- [SerializeField] private GameObject _playerPrefab;
- [SerializeField] private TextMeshProUGUI _scoreTextUI;
+         }
  
- 
- private int _score;
-
+    
  public int Score
  {
      get { return _score; }
@@ -62,16 +67,14 @@ public class GameBehavior : MonoBehaviour
     
         else
         {
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
         }
     }
     // --------------------------------------------------------------------------------------------- UPDATE
     private void Start()
     {
-        ResetGame();
-        
         _audioSource = GetComponent<AudioSource>();
-        // State = Utilities.GameState.Play;
+        State = Utilities.GameState.Play;
     }
 
 // --------------------------------------------------------------------------------------------- UPDATE
@@ -88,24 +91,27 @@ public class GameBehavior : MonoBehaviour
 // --------------------------------------------------------------------------------------------- UPDATE
     private void SpawnPlayer()
     {
-        _currentPlayer = Instantiate(_playerPrefab);
+        Instantiate(playerPrefab);
     }
     
     // --------------------------------------------------------------------------------------------- UPDATE 
-    private void IncreaseScore()
+    public void IncreaseScore()
     {
         _score++;
     }
 
 
     // --------------------------------------------------------------------------------------------- UPDATE 
-    public void ResetGame()
+    public void GameOver()
     {
-        Debug.Log("Game reset!");
+        _playButton.SetActive(true);
+        _gameOver.SetActive(true);
+        
+        Debug.Log("Game over!");
 
-        if (_currentPlayer != null)
+        if (currentPlayer != null)
         {
-            Destroy(_currentPlayer);
+            Destroy(currentPlayer);
         }
 
         Score = 0;
@@ -120,7 +126,7 @@ public class GameBehavior : MonoBehaviour
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
 
-        ResetGame();
+        GameOver();
     }
 
     public IEnumerator ResetAfterChairliftHit()
@@ -128,7 +134,7 @@ public class GameBehavior : MonoBehaviour
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
 
-        ResetGame();
+        GameOver();
     }
 
     public IEnumerator ResetAfterRockTowerHit()
@@ -136,7 +142,7 @@ public class GameBehavior : MonoBehaviour
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
 
-        ResetGame();
+        GameOver();
     }
 // --------------------------------------------------------------------------------------------- END BRACKET
 }

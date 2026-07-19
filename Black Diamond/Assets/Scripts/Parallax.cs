@@ -17,7 +17,10 @@ public class Parallax : MonoBehaviour
 // --------------------------------------------------------------------------------------------- UPDATE
     private void Update()
     {
-        _meshRenderer.material.mainTextureOffset += new Vector2(_animationSpeed * Time.deltaTime, 0);
+        if (GameBehavior.Instance.State == Utilities.GameState.Play)
+        {
+            _meshRenderer.material.mainTextureOffset += new Vector2(_animationSpeed * Time.deltaTime, 0);
+        }
                                         // meshRenderer is talking about the backgroundQuad
                                         // offset is what is moving it right to left
         
