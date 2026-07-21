@@ -82,19 +82,16 @@ public class GameBehavior : MonoBehaviour
 // --------------------------------------------------------------------------------------------- UPDATE
     public void StartGame()
     {
-        Debug.Log("1");
+        Debug.Log("Starting Game!!");
 
         Score = 0;
 
-        Debug.Log("2");
-
         SpawnPlayer();
 
-        Debug.Log("3");
+        _spawner.enabled = true;
 
         State = Utilities.GameState.Play;
 
-        Debug.Log("4");
     }
 // --------------------------------------------------------------------------------------------- UPDATE
 
@@ -115,23 +112,6 @@ public class GameBehavior : MonoBehaviour
         _currentPlayer = Instantiate(_playerPrefab);
     }
     
-
-// --------------------------------------------------------------------------------------------- UPDATE
-    // public void ResetGame()
-    // {
-    //     Debug.Log("Game Reset!");
-    //
-    //     if (_currentPlayer != null)
-    //     {
-    //         Destroy(_currentPlayer);
-    //     }
-    //
-    //     Score = 0;
-    // }
-
-    // not sure i need this cause I'm going to have a start game and pause screen and those
-    // will be able to say score = 0 and destroy current player if there is one and reinstatiate one (?)
-
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void IncreaseScore()
     {
@@ -141,6 +121,7 @@ public class GameBehavior : MonoBehaviour
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void GameOver()       
     {
+        _spawner.enabled = false;
         _playButton.SetActive(true);
         _gameOver.SetActive(true);
         
@@ -150,10 +131,13 @@ public class GameBehavior : MonoBehaviour
         {
             Destroy(_currentPlayer);
         }
+        
+        SkiPipes[] pipes = FindObjectsByType<SkiPipes>(FindObjectsSortMode.None);
 
-        // more here, right? say hey we need the pause screen to come up 
-        // and I need the score to say 0 but different place so diff game object 
-        // i think, and i also need to pause everything ??? 
+        foreach (SkiPipes pipe in pipes)
+        {
+            Destroy(pipe.gameObject);
+        }
     }
 
 
