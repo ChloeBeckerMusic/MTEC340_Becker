@@ -4,7 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-    public Sprite[] _sprites;
+    public Sprite[] Sprites;
     public float Strength = 5f;
     public float Gravity = -9.81f;
     private SpriteRenderer _spriteRenderer;
@@ -25,11 +25,9 @@ public class Player : MonoBehaviour
 
  private void Awake()
  {
-_spriteRenderer = GetComponent<SpriteRenderer>();
-
-
-_source = GetComponent<AudioSource>();
-_rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _source = GetComponent<AudioSource>();
+        _rb = GetComponent<Rigidbody2D>();
  }
  
 // --------------------------------------------------------------------------------------------- START
@@ -47,18 +45,21 @@ _rb = GetComponent<Rigidbody2D>();
 
     private void Update()
     {
-            _rb.simulated = GameBehavior.Instance.State == Utilities.GameState.Play;
+        bool playing = GameBehavior.Instance.State == Utilities.GameState.Play;
+
+        _rb.simulated = playing;
+
+        if (!playing)
+            return;
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 _direction = Vector3.up * Strength;
             }
 
+            // apply gravity
             _direction.y += Gravity * Time.deltaTime;
             transform.position += _direction * Time.deltaTime;
-        
-        // this makes sure that gravity is an acceleration
-                                            // which is why we're multiplying it both times
 
     }
 
@@ -79,11 +80,15 @@ _rb = GetComponent<Rigidbody2D>();
 
 // --------------------------------------------------------------------------------------------- ANIMATE SPRITE
 
-    private void AnimateSprite()
-    {
-        _spriteIndex++;
+private void AnimateSprite()
         {
-            if (_spriteIndex >= _sprites.Length)
+            if (GameBehavior.Instance.State != Utilities.GameState.Play)
+                return;
+        
+        _spriteIndex++;
+
+        {
+            if (_spriteIndex >= Sprites.Length)
             {
                 _spriteIndex = 0;
                                             // moving between sprites, and when you get to the end frame,
@@ -91,9 +96,9 @@ _rb = GetComponent<Rigidbody2D>();
                                             // go back to zero to restart the animation
             }
 
-            if (_spriteIndex < _sprites.Length && _spriteIndex >= 0)
+            if (_spriteIndex < Sprites.Length && _spriteIndex >= 0)
             {
-                _spriteRenderer.sprite = _sprites[_spriteIndex];
+                _spriteRenderer.sprite = Sprites[_spriteIndex];
             }
         }
     }
@@ -112,24 +117,19 @@ _rb = GetComponent<Rigidbody2D>();
         if (other.CompareTag("SkiFence"))             // losing SFX-- this is going to be a longer sound effect
         {
             Debug.Log("You hit the fence!");
-            _audioSource.PlayOneShot(_skiFenceHit, 1f);
-            StartCoroutine(GameBehavior.Instance.ResetAfterFenceHit());
+            StartCoroutine(GameBehavior.Instance.GameOverAfterFenceHit());
             
         }                        
     else if (other.gameObject.CompareTag("Chairlift"))  //angry "hey!!"
         {
             Debug.Log("You hit the chairlift!");
-            FindAnyObjectByType<GameBehavior>().GameOver();
-            _audioSource.PlayOneShot(_chairliftHit, 1f);
-            StartCoroutine(GameBehavior.Instance.ResetAfterChairliftHit());
+            StartCoroutine(GameBehavior.Instance.GameOverAfterChairliftHit());
         } 
 
     if (other.gameObject.CompareTag("RockTower"))  // rock crumble 
         {
             Debug.Log("You hit the chairlift!");
-            FindAnyObjectByType<GameBehavior>().GameOver();
-            _audioSource.PlayOneShot(_chairliftHit, 1f);
-            StartCoroutine(GameBehavior.Instance.ResetAfterRockTowerHit());
+            StartCoroutine(GameBehavior.Instance.GameOverAfterRockTowerHit());
         }
 
         _source.pitch = Random.Range(0.9f, 1.1f);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Parallax : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _meshRenderer;
+    private MeshRenderer _meshRenderer;
     [SerializeField] private float _animationSpeed = 1f;
 
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//

@@ -6,50 +6,46 @@ using UnityEngine.Timeline;
 public class GameBehavior : MonoBehaviour
 {
 
-    public static GameBehavior Instance { get; private set; }
+    public static GameBehavior Instance;
+
+    private Utilities.GameState _state;
+
+    public Utilities.GameState State
+    {
+        get => _state;
+
+        set
+        {
+            _state = value;
+            _message.enabled = State == Utilities.GameState.Pause;
+        }
+    }
+
 
     [SerializeField] private TMP_Text _message;
-    private float _durationBetweenPoints = 0.3f;
 
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _skiFenceHit;
 
+    private GameObject _currentPlayer;
+    [SerializeField] public GameObject _playerPrefab;
+    [SerializeField] private TextMeshProUGUI _scoreTextUI;
     
-
-    public Player currentPlayer;
-    public GameObject playerPrefab;
     [SerializeField] private Spawner _spawner;
     [SerializeField] private GameObject _playButton;
     [SerializeField] private GameObject _gameOver;
 
-    [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _skiFenceHit;
- 
-    [SerializeField] private TextMeshProUGUI _scoreTextUI;
     private int _score;
-
-
-    private Utilities.GameState _state; 
-    public Utilities.GameState State
-         {
-             get => _state;
-         
-             set
-             {
-                 _state = value;
-                 _message.enabled = State == Utilities.GameState.Pause;
-             }
-
-         }
- 
     
- public int Score
- {
-     get { return _score; }
-     set 
-     { 
-         _score = value;      
-         _scoreTextUI.text = "Score: " + _score.ToString();
-     }
- }
+     public int Score
+    {
+        get { return _score; }
+        set 
+        { 
+            _score = value;      
+            _scoreTextUI.text = "Score: " + _score.ToString();
+        }
+    }
 
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
 
@@ -71,8 +67,9 @@ public class GameBehavior : MonoBehaviour
         }
     }
     // --------------------------------------------------------------------------------------------- UPDATE
-    private void Start()
+    private void Start()       // only start should call reset game 
     {
+        //ResetGame();
         _audioSource = GetComponent<AudioSource>();
         State = Utilities.GameState.Play;
     }
@@ -88,40 +85,61 @@ public class GameBehavior : MonoBehaviour
                 Utilities.GameState.Play;
         }
     }
-// --------------------------------------------------------------------------------------------- UPDATE
-    private void SpawnPlayer()
+
+    
+    // --------------------------------------------------------------------------------------------- UPDATE
+    private void SpawnPlayer()     
+        // i want this to be called when they press play
+    // so to call it I'd probably want Invoke(nameof(SpawnPlayer))
     {
-        Instantiate(playerPrefab);
+        _currentPlayer = Instantiate(_playerPrefab);
     }
     
+
+// --------------------------------------------------------------------------------------------- UPDATE
+    // public void ResetGame()
+    // {
+    //     Debug.Log("Game Reset!");
+    //
+    //     if (_currentPlayer != null)
+    //     {
+    //         Destroy(_currentPlayer);
+    //     }
+    //
+    //     Score = 0;
+    // }
+
+    // not sure i need this cause I'm going to have a start game and pause screen and those
+    // will be able to say score = 0 and destroy current player if there is one and reinstatiate one (?)
+
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void IncreaseScore()
     {
         _score++;
     }
 
-
     // --------------------------------------------------------------------------------------------- UPDATE 
-    public void GameOver()
+    public void GameOver()       
     {
         _playButton.SetActive(true);
         _gameOver.SetActive(true);
         
         Debug.Log("Game over!");
 
-        if (currentPlayer != null)
+        if (_currentPlayer != null)
         {
-            Destroy(currentPlayer);
+            Destroy(_currentPlayer);
         }
 
-        Score = 0;
-        Invoke(nameof(SpawnPlayer), _durationBetweenPoints);
+        // more here, right? say hey we need the pause screen to come up 
+        // and I need the score to say 0 but different place so diff game object 
+        // i think, and i also need to pause everything ??? 
     }
 
 
 // --------------------------------------------------------------------------------------------- COROUTINES
 
-    public IEnumerator ResetAfterFenceHit()
+    public IEnumerator GameOverAfterFenceHit()
     {
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
@@ -129,7 +147,7 @@ public class GameBehavior : MonoBehaviour
         GameOver();
     }
 
-    public IEnumerator ResetAfterChairliftHit()
+    public IEnumerator GameOverAfterChairliftHit()
     {
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
@@ -137,7 +155,7 @@ public class GameBehavior : MonoBehaviour
         GameOver();
     }
 
-    public IEnumerator ResetAfterRockTowerHit()
+    public IEnumerator GameOverAfterRockTowerHit()
     {
         _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);

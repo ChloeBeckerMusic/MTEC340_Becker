@@ -8,18 +8,17 @@ public class Spawner : MonoBehaviour
     public float SpawnRate = 1f; //seconds
     public float MinHeight = -1f;
     public float MaxHeight = 1f;
-    public float verticalGap = 3f;
+    public float VerticalGap = 3f;
 
 //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
 // --------------------------------------------------------------------------------------------- ON ENABLE
 
     private void OnEnable()
     {
-        if (GameBehavior.Instance.State == Utilities.GameState.Play)
-        {
+
         InvokeRepeating(nameof(Spawn), SpawnRate, SpawnRate);
                                         // how long until you invoke spawn, how many seconds between each spawn
-        }
+        
     }
 // --------------------------------------------------------------------------------------------- ON DISABLE
 
@@ -40,7 +39,7 @@ public class Spawner : MonoBehaviour
                                         // at a position, with no rotation (Quaternion.identity)
 
         skiPipes.transform.position += Vector3.up * Random.Range(MinHeight, MaxHeight);
-        skiPipes.gap = verticalGap;
+        skiPipes.gap = VerticalGap;
          }
     }                                   // remember when I invoked spawn? Yeah, I want you to get a random value
                                         // by multiplying our min/max height (-1 to 1 for fractions duh) along the 
