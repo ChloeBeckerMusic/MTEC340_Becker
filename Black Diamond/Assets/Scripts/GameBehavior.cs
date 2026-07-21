@@ -68,7 +68,7 @@ public class GameBehavior : MonoBehaviour
     
         else
         {
-                DestroyImmediate(gameObject);
+                Destroy(gameObject);
         }
     }
     // --------------------------------------------------------------------------------------------- UPDATE
@@ -79,6 +79,23 @@ public class GameBehavior : MonoBehaviour
         State = Utilities.GameState.Menu;
     }
 
+// --------------------------------------------------------------------------------------------- UPDATE
+    public void StartGame()
+    {
+        Debug.Log("1");
+
+        Score = 0;
+
+        Debug.Log("2");
+
+        SpawnPlayer();
+
+        Debug.Log("3");
+
+        State = Utilities.GameState.Play;
+
+        Debug.Log("4");
+    }
 // --------------------------------------------------------------------------------------------- UPDATE
 
     private void Update()
@@ -94,8 +111,6 @@ public class GameBehavior : MonoBehaviour
     
     // --------------------------------------------------------------------------------------------- UPDATE
     private void SpawnPlayer()     
-        // i want this to be called when they press play
-    // so to call it I'd probably want Invoke(nameof(SpawnPlayer))
     {
         _currentPlayer = Instantiate(_playerPrefab);
     }
