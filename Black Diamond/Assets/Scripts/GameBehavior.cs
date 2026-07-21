@@ -18,6 +18,11 @@ public class GameBehavior : MonoBehaviour
         {
             _state = value;
             _message.enabled = State == Utilities.GameState.Pause;
+
+            _playButton.SetActive(State == Utilities.GameState.Menu ||
+                                  State == Utilities.GameState.GameOver);
+
+            _gameOver.SetActive(State == Utilities.GameState.GameOver);
         }
     }
 
@@ -67,11 +72,11 @@ public class GameBehavior : MonoBehaviour
         }
     }
     // --------------------------------------------------------------------------------------------- UPDATE
-    private void Start()       // only start should call reset game 
+    private void Start()      
     {
-        //ResetGame();
         _audioSource = GetComponent<AudioSource>();
-        State = Utilities.GameState.Play;
+
+        State = Utilities.GameState.Menu;
     }
 
 // --------------------------------------------------------------------------------------------- UPDATE
