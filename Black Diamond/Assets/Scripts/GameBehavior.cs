@@ -34,8 +34,9 @@ public class GameBehavior : MonoBehaviour
 
     private GameObject _currentPlayer;
     [SerializeField] public GameObject _playerPrefab;
-    [SerializeField] private TextMeshProUGUI _scoreTextUI;
-    
+    [SerializeField] private TextMeshProUGUI _gameplayScoreText;
+    [SerializeField] private TextMeshProUGUI _gameOverScoreText;
+
     [SerializeField] private Spawner _spawner;
     [SerializeField] private GameObject _playButton;
     [SerializeField] private GameObject _gameOver;
@@ -48,7 +49,8 @@ public class GameBehavior : MonoBehaviour
         set 
         { 
             _score = value;      
-            _scoreTextUI.text = "Score: " + _score.ToString();
+            _gameplayScoreText.text = "Score: " + _score;
+            _gameOverScoreText.text = "Score: " + _score;
         }
     }
 
@@ -115,15 +117,14 @@ public class GameBehavior : MonoBehaviour
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void IncreaseScore()
     {
-        _score++;
+        Score++;
     }
 
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void GameOver()       
     {
         _spawner.enabled = false;
-        _playButton.SetActive(true);
-        _gameOver.SetActive(true);
+        State = Utilities.GameState.GameOver;
         
         Debug.Log("Game over!");
 

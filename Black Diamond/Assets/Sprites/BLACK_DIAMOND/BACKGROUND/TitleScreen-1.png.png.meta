@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c194d365c66314664a6608cb632d23b7
+guid: 8344a6a1fa3bd43d9a8d6505dd9a8c34
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5472358914667958257
-    second: Ski Sprite-6.png_0
+      213: 4313710408555878061
+    second: TitleScreen-1.png_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ski Sprite-6.png_0
+      name: TitleScreen-1.png_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 22
+        width: 192
+        height: 108
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f0036c79f864e04b0800000000000000
-      internalID: -5472358914667958257
+      spriteID: da6d0e5f2c06ddb30800000000000000
+      internalID: 4313710408555878061
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ski Sprite-6.png_0: -5472358914667958257
+      TitleScreen-1.png_0: 4313710408555878061
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

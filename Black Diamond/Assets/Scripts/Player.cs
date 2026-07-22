@@ -5,12 +5,17 @@ public class Player : MonoBehaviour
 {
 
     public Sprite[] Sprites;
+    [SerializeField] private Sprite _deathSprite;
     public float Strength = 5f;
     public float Gravity = -9.81f;
     private SpriteRenderer _spriteRenderer;
     private Vector3 _direction;
     private int _spriteIndex;
     
+    // dead and dead physics: 
+    private bool _isDead = false;
+    private Transform _attachedObject;
+    private Vector3 _attachmentOffset;
 
     private Rigidbody2D _rb;
     private AudioSource _source; // this is the regular audio source
@@ -34,6 +39,7 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
+        _isDead = false;
         Vector3 position = transform.position;
         position.y = 0f;
         transform.position = position;
@@ -46,6 +52,19 @@ public class Player : MonoBehaviour
     private void Update()
     {
         bool playing = GameBehavior.Instance.State == Utilities.GameState.Play;
+
+        if (_isDead)
+        {
+            if (_attachedObject != null)
+            {
+                transform.position = _attachedObject.position + _attachmentOffset;
+            }
+
+            return;
+        }
+
+        if (_isDead)
+            return;
 
         _rb.simulated = playing;
 
@@ -103,6 +122,25 @@ private void AnimateSprite()
         }
     }
 
+    public void Die(Transform parent)
+    {
+        _isDead = true;
+
+        _spriteRenderer.sprite = _deathSprite;    // switch to death sprite 
+
+        CancelInvoke(nameof(AnimateSprite));    // stop animation loop 
+
+        _direction = Vector3.zero;            // stop custom movement 
+        _rb.linearVelocity = Vector2.zero;           // stop rigidbody movement 
+        _rb.simulated = false;                      // freeze physics 
+        
+        _attachedObject = parent;               // stick to the parent object (collision place)   (making sure it doesn't
+                                                // inherit the rotation or other transform properties 
+
+        _attachmentOffset = transform.position - parent.position;    // make sure the player freezes EXACTLY where it stopped 
+
+    }
+
     // ---------------------------------------------------------------------------------------------
 
     private void OnTriggerEnter2D(Collider2D other)     // these are the sounds before reset game
@@ -117,18 +155,21 @@ private void AnimateSprite()
         if (other.CompareTag("SkiFence"))             // losing SFX-- this is going to be a longer sound effect
         {
             Debug.Log("You hit the fence!");
+            Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterFenceHit());
             
         }                        
     else if (other.gameObject.CompareTag("Chairlift"))  //angry "hey!!"
         {
             Debug.Log("You hit the chairlift!");
+            Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterChairliftHit());
         } 
 
     if (other.gameObject.CompareTag("RockTower"))  // rock crumble 
         {
             Debug.Log("You hit the chairlift!");
+            Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterRockTowerHit());
         }
 
