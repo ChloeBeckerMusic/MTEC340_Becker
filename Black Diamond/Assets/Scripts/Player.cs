@@ -17,6 +17,24 @@ public class Player : MonoBehaviour
     private Transform _attachedObject;
     private Vector3 _attachmentOffset;
 
+    private bool _driftWithFence = false; //bro the parallax isn't moving the transform of the fence so we need to do this 
+
+   
+    [SerializeField] private float _normalSpeed = 5f;
+    [SerializeField] private float _waffleSpeed = 7f;
+
+    public bool HasWaffle { get; private set; }
+    public void GiveWaffle()
+    {
+        HasWaffle = true;
+    }
+
+    public void ConsumeWaffle()
+    {
+        HasWaffle = false;
+    }
+
+
     private Rigidbody2D _rb;
     private AudioSource _source; // this is the regular audio source
     [SerializeField] private AudioSource _audioSource;    // this is the one for the coroutine
@@ -60,6 +78,11 @@ public class Player : MonoBehaviour
                 transform.position = _attachedObject.position + _attachmentOffset;
             }
 
+            if (_driftWithFence)
+            {
+                transform.position += Time.deltaTime * 5f * Vector3.left;
+                // 1f is the animation speed, bear with me guys 
+            }
             return;
         }
 
@@ -134,10 +157,17 @@ private void AnimateSprite()
         _rb.linearVelocity = Vector2.zero;           // stop rigidbody movement 
         _rb.simulated = false;                      // freeze physics 
         
-        _attachedObject = parent;               // stick to the parent object (collision place)   (making sure it doesn't
-                                                // inherit the rotation or other transform properties 
+        if (parent.CompareTag("SkiFence"))
+        {
+            _driftWithFence = true;
+        } // stick to the parent object (collision place)   (making sure it doesn't// inherit the rotation or other transform properties 
+        
+        else
+        {
+            _attachedObject = parent;
+            _attachmentOffset = transform.position - parent.position;    // make sure the player freezes EXACTLY where it stopped 
 
-        _attachmentOffset = transform.position - parent.position;    // make sure the player freezes EXACTLY where it stopped 
+        }
 
     }
 
@@ -168,7 +198,7 @@ private void AnimateSprite()
 
     if (other.gameObject.CompareTag("RockTower"))  // rock crumble 
         {
-            Debug.Log("You hit the chairlift!");
+            Debug.Log("You hit the rock tower!");
             Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterRockTowerHit());
         }

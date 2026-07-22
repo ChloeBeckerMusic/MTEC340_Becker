@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f671b2d4f629642ebb3d8ab143f6ed19
+guid: f52fa917468a64a33a4c4ba4502db2a1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1988709499096072589
-    second: Cursor-1.png_0
+      213: 2623888306899032779
+    second: Chairlift-snowboard.png_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cursor-1.png_0
+      name: Chairlift-snowboard.png_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 7
-        width: 14
-        height: 25
+        x: 5
+        y: 0
+        width: 27
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d810117b0c0599b10800000000000000
-      internalID: 1988709499096072589
+      spriteID: bca940f538ce96420800000000000000
+      internalID: 2623888306899032779
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Cursor-1.png_0: 1988709499096072589
+      Chairlift-snowboard.png_0: 2623888306899032779
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

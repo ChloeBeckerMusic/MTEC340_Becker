@@ -3,9 +3,6 @@ using UnityEngine;
 public class SkiPipes : MonoBehaviour
 {
 
-    public Transform top;
-    public Transform bottom;
-
     public float speed = 5f;
     public float gap = 3f;
     private float _leftEdge;
@@ -20,8 +17,7 @@ public class SkiPipes : MonoBehaviour
                                         // the -1f is so that we don't see the pipe disappear since the
                                         // pipe is centered around the center of the object
                                         // also we only care about the x-axis here
-        top.position += Vector3.up * gap / 2f;
-        bottom.position += Vector3.down * gap / 2f;
+       
     }
 
 // --------------------------------------------------------------------------------------------- UPDATE

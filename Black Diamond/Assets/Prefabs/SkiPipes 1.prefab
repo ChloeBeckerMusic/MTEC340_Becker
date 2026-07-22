@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 98513469073685781}
   - component: {fileID: 4269882782041212140}
   m_Layer: 0
-  m_Name: SkiPipes
+  m_Name: SkiPipes 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

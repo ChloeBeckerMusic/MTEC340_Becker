@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Timeline;
 
@@ -17,29 +18,69 @@ public class GameBehavior : MonoBehaviour
         set
         {
             _state = value;
-            _message.enabled = State == Utilities.GameState.Pause;
 
-            _playButton.SetActive(State == Utilities.GameState.Menu ||
-                                  State == Utilities.GameState.GameOver);
+            _playButtonHome.SetActive(State == Utilities.GameState.Menu);
 
-            _gameOver.SetActive(State == Utilities.GameState.GameOver);
+            _playButtonGameOver.SetActive(State == Utilities.GameState.GameOver);
+
+            _gameOverButton.SetActive(State == Utilities.GameState.GameOver);
+
+            _gameOverBackground.SetActive(State == Utilities.GameState.GameOver);
+            
+            _pauseImage.SetActive(State == Utilities.GameState.Pause);
+
+            _spawner.enabled = State == Utilities.GameState.Play;
+
+            _characterImage.gameObject.SetActive(State == Utilities.GameState.GameOver);
+
+
         }
     }
 
-
-    [SerializeField] private TMP_Text _message;
-
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _skiFenceHit;
+
+    [SerializeField] private GameObject _pauseImage;
+   
+    [SerializeField] private Image _dialogueImageLong;
+    [SerializeField] private Image _dialogueImageShort;
+    [SerializeField] private Image _characterImage;
+    
+    private Sprite _currentClosed;
+    private Sprite _currentOpen;
+
+    [SerializeField] private Sprite _defaultClosed;
+    [SerializeField] private Sprite _defaultOpen;
+    [SerializeField] private Sprite _defaultDialogue;
+
+    [SerializeField] private Sprite _passerbyClosed;
+    [SerializeField] private Sprite _passerbyOpen;
+    [SerializeField] private Sprite _passerbyDialogue;
+
+    [SerializeField] private Sprite _sisterClosed;
+    [SerializeField] private Sprite _sisterOpen;
+    [SerializeField] private Sprite _sisterDialogue;
+
+    [SerializeField] private Sprite _lilbroClosed;
+    [SerializeField] private Sprite _lilbroOpen;
+    [SerializeField] private Sprite _lilbroDialogue;
+
 
     private GameObject _currentPlayer;
     [SerializeField] public GameObject _playerPrefab;
     [SerializeField] private TextMeshProUGUI _gameplayScoreText;
     [SerializeField] private TextMeshProUGUI _gameOverScoreText;
+    [SerializeField] private GameObject _gameOverBackground;
 
     [SerializeField] private Spawner _spawner;
-    [SerializeField] private GameObject _playButton;
-    [SerializeField] private GameObject _gameOver;
+    [SerializeField] private GameObject _playButtonGameOver;
+    [SerializeField] private GameObject _playButtonHome;
+    [SerializeField] private GameObject _gameOverButton;
+
+    private int _nextWaffleGate = 21 + 7;
+    private bool _waffleExists = false;
+
+
 
     private int _score;
     
@@ -77,6 +118,9 @@ public class GameBehavior : MonoBehaviour
     private void Start()      
     {
         _audioSource = GetComponent<AudioSource>();
+        
+        _dialogueImageLong.gameObject.SetActive(false);
+        _dialogueImageShort.gameObject.SetActive(false);
 
         State = Utilities.GameState.Menu;
     }
@@ -84,15 +128,14 @@ public class GameBehavior : MonoBehaviour
 // --------------------------------------------------------------------------------------------- UPDATE
     public void StartGame()
     {
-        Debug.Log("Starting Game!!");
+        _dialogueImageLong.gameObject.SetActive(false);
+        _dialogueImageShort.gameObject.SetActive(false);
 
         Score = 0;
-
         SpawnPlayer();
 
-        _spawner.enabled = true;
-
         State = Utilities.GameState.Play;
+
 
     }
 // --------------------------------------------------------------------------------------------- UPDATE
@@ -123,10 +166,9 @@ public class GameBehavior : MonoBehaviour
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void GameOver()       
     {
-        _spawner.enabled = false;
         State = Utilities.GameState.GameOver;
         
-        Debug.Log("Game over!");
+        ShowGameOverDialogue();
 
         if (_currentPlayer != null)
         {
@@ -141,12 +183,52 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
+    private void ShowGameOverDialogue()
+    {
+        
+        if (Score <= 10)
+        {
+            _currentClosed = _defaultClosed;
+            _currentOpen = _defaultOpen;
+            _dialogueImageShort.sprite = _defaultDialogue;
+            _dialogueImageShort.gameObject.SetActive(true);
+            _dialogueImageLong.gameObject.SetActive(false);
+        }
+        else if (Score <= 20)
+        {
+            _currentClosed = _passerbyClosed;
+            _currentOpen = _passerbyOpen;
+            _dialogueImageShort.sprite = _passerbyDialogue;
+            _dialogueImageShort.gameObject.SetActive(true);
+            _dialogueImageLong.gameObject.SetActive(false);
+        }
+        else if (Score <= 30)    
+        {
+            _currentClosed = _sisterClosed;
+            _currentOpen = _sisterOpen;
+            _dialogueImageLong.sprite = _sisterDialogue;
+            _dialogueImageShort.gameObject.SetActive(false);
+            _dialogueImageLong.gameObject.SetActive(true);
+        }
+        else     // 31+
+        {
+            _currentClosed = _lilbroClosed;
+            _currentOpen = _lilbroOpen;
+            _dialogueImageLong.sprite = _lilbroDialogue;
+            _dialogueImageShort.gameObject.SetActive(false);
+            _dialogueImageLong.gameObject.SetActive(true);
+        }
+
+        _characterImage.sprite = _currentClosed;
+
+        StartCoroutine(AnimateDialogue());
+    }
 
 // --------------------------------------------------------------------------------------------- COROUTINES
 
     public IEnumerator GameOverAfterFenceHit()
     {
-        _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
+        _audioSource.PlayOneShot(_skiFenceHit, 0.35f);  
         yield return new WaitForSeconds(_skiFenceHit.length);
 
         GameOver();
@@ -167,5 +249,22 @@ public class GameBehavior : MonoBehaviour
 
         GameOver();
     }
+
+    private IEnumerator AnimateDialogue()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < 6; i++)
+        {
+            _characterImage.sprite = _currentOpen;
+            yield return new WaitForSeconds(0.2f);
+
+            _characterImage.sprite = _currentClosed;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        _characterImage.sprite = _currentClosed;
+    }
+
 // --------------------------------------------------------------------------------------------- END BRACKET
 }
