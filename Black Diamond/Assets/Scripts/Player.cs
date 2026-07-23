@@ -7,7 +7,10 @@ public class Player : MonoBehaviour
 
     public Sprite[] Sprites;
     [SerializeField] private Sprite _deathSprite;
-    public float Strength = 5f;
+    [SerializeField] private float _normalStrength = 5f;
+    [SerializeField] private float _waffleStrength = 7f;
+    private float _currentStrength;
+
     public float Gravity = -9.81f;
     private SpriteRenderer _spriteRenderer;
     private Vector3 _direction;
@@ -19,13 +22,8 @@ public class Player : MonoBehaviour
     private Vector3 _attachmentOffset;
 
     private bool _driftWithFence = false; //bro the parallax isn't moving the transform of the fence so we need to do this 
-
-   
-    [SerializeField] private float _normalSpeed = 5f;
-    [SerializeField] private float _waffleSpeed = 7f;
     private bool _isInvincible = false;
 
-    
     private Rigidbody2D _rb;
     private AudioSource _source; // this is the regular audio source
     [SerializeField] private AudioSource _audioSource;    // this is the one for the coroutine
@@ -42,6 +40,7 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _source = GetComponent<AudioSource>();
         _rb = GetComponent<Rigidbody2D>();
+        _currentStrength = _normalStrength;
  }
  
 // --------------------------------------------------------------------------------------------- START
@@ -87,7 +86,7 @@ public class Player : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
-                _direction = Vector3.up * Strength;
+                _direction = Vector3.up * _currentStrength;
             }
 
             // apply gravity
@@ -112,8 +111,8 @@ public class Player : MonoBehaviour
 
 
 // --------------------------------------------------------------------------------------------- ANIMATE SPRITE
-
-private void AnimateSprite()
+    
+    private void AnimateSprite()
         {
             if (GameBehavior.Instance.State != Utilities.GameState.Play)
                 return;
@@ -136,6 +135,11 @@ private void AnimateSprite()
         }
     }
 
+    public void SetWaffleBoost(bool boosted)
+    {
+        _currentStrength = boosted ? _waffleStrength : _normalStrength;
+    }
+    
     public void Die(Transform parent)
     {
         _isDead = true;
@@ -222,6 +226,7 @@ private void AnimateSprite()
         {
             Debug.Log("wtf are you doing here bro");
             GameBehavior.Instance.GameOver();
+            return;
         }
 
         _source.pitch = Random.Range(0.9f, 1.1f);

@@ -4,11 +4,14 @@ public class WaffleBehavior : MonoBehaviour
 {
     [SerializeField] private float _speed = 5f;
     private float _leftEdge;
+    private Spawner _spawner;
 
 
     private void Start()
     {
         _leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
+
+        _spawner = FindFirstObjectByType<Spawner>();
     }
 
     private void Update()
@@ -20,6 +23,7 @@ public class WaffleBehavior : MonoBehaviour
 
         if (transform.position.x < _leftEdge)
         {
+            _spawner.WaffleMissed();
             Destroy(gameObject);
         }
     }
@@ -30,7 +34,7 @@ public class WaffleBehavior : MonoBehaviour
             return;
 
         GameBehavior.Instance.PlayerCollectedWaffle();
-
+        _spawner.WaffleCollected();
         Destroy(gameObject);
     }
 }

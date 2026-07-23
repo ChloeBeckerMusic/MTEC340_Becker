@@ -90,14 +90,21 @@ public class GameBehavior : MonoBehaviour
     
     private bool _hasWaffle = false; // does the player have a waffle rn
 
-   
+    public bool HasWaffle => _hasWaffle;
+
     public bool UseWaffle()
     {
         if (!_hasWaffle)
             return false;
       
         _hasWaffle = false;
-        _waffleIcon.gameObject.SetActive(false);
+       
+        Player player = FindFirstObjectByType<Player>();
+
+        if (player != null)
+        {
+            player.SetWaffleBoost(false);
+        }
 
         _audioSource.PlayOneShot(_waffleEat,0.35f);
 
@@ -156,6 +163,14 @@ public class GameBehavior : MonoBehaviour
         _dialogueImageShort.gameObject.SetActive(false);
 
         Score = 0;
+
+        Spawner spawner = FindFirstObjectByType<Spawner>();
+
+        if (spawner != null)
+        {
+            spawner.ResetSpawner();
+        }
+
         SpawnPlayer();
 
         State = Utilities.GameState.Play;
@@ -184,14 +199,30 @@ public class GameBehavior : MonoBehaviour
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void IncreaseScore()
     {
-        Score++;
+        int points = 1;
+
+        if (_hasWaffle)
+        {
+            points = 2;
+        }
+
+        Score += points;
     }
 
     public void PlayerCollectedWaffle()
     {
         _hasWaffle = true;
+
+        Player player = FindFirstObjectByType<Player>();
+
+        if (player != null)
+        {
+            player.SetWaffleBoost(true);
+        }
+
         _waffleIcon.sprite = _wholeWaffle;
         _waffleIcon.gameObject.SetActive(true);
+
 
         Debug.Log("Waffle collected!");
     }
@@ -199,10 +230,10 @@ public class GameBehavior : MonoBehaviour
     private IEnumerator EatWaffleAnimation()
     {
         _waffleIcon.sprite = _oneBiteWaffle;
-        yield return new WaitForSeconds(0.08f);
+        yield return new WaitForSeconds(0.25f);
 
         _waffleIcon.sprite = _twoBiteWaffle;
-        yield return new WaitForSeconds(0.08f);
+        yield return new WaitForSeconds(0.25f);
 
         _waffleIcon.gameObject.SetActive(false);
     }
@@ -239,7 +270,7 @@ public class GameBehavior : MonoBehaviour
             _dialogueImageShort.gameObject.SetActive(true);
             _dialogueImageLong.gameObject.SetActive(false);
         }
-        else if (Score <= 20)
+        else if (Score <= 35)
         {
             _currentClosed = _passerbyClosed;
             _currentOpen = _passerbyOpen;
@@ -247,7 +278,7 @@ public class GameBehavior : MonoBehaviour
             _dialogueImageShort.gameObject.SetActive(true);
             _dialogueImageLong.gameObject.SetActive(false);
         }
-        else if (Score <= 30)    
+        else if (Score <= 50)    
         {
             _currentClosed = _sisterClosed;
             _currentOpen = _sisterOpen;
@@ -255,7 +286,7 @@ public class GameBehavior : MonoBehaviour
             _dialogueImageShort.gameObject.SetActive(false);
             _dialogueImageLong.gameObject.SetActive(true);
         }
-        else     // 31+
+        else     // 51+
         {
             _currentClosed = _lilbroClosed;
             _currentOpen = _lilbroOpen;
