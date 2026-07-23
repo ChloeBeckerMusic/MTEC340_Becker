@@ -39,13 +39,21 @@ public class GameBehavior : MonoBehaviour
 
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _skiFenceHit;
+    [SerializeField] private AudioClip _waffleEat;
+
 
     [SerializeField] private GameObject _pauseImage;
    
     [SerializeField] private Image _dialogueImageLong;
     [SerializeField] private Image _dialogueImageShort;
     [SerializeField] private Image _characterImage;
-    
+    [SerializeField] private Image _waffleIcon;
+
+    [SerializeField] private Sprite _wholeWaffle;
+    [SerializeField] private Sprite _oneBiteWaffle;
+    [SerializeField] private Sprite _twoBiteWaffle;
+
+
     private Sprite _currentClosed;
     private Sprite _currentOpen;
 
@@ -79,8 +87,24 @@ public class GameBehavior : MonoBehaviour
 
     private int _nextWaffleGate = 21 + 7;
     private bool _waffleExists = false;
+    
+    private bool _hasWaffle = false; // does the player have a waffle rn
 
+   
+    public bool UseWaffle()
+    {
+        if (!_hasWaffle)
+            return false;
+      
+        _hasWaffle = false;
+        _waffleIcon.gameObject.SetActive(false);
 
+        _audioSource.PlayOneShot(_waffleEat,0.35f);
+
+        StartCoroutine(EatWaffleAnimation());
+
+        return true;
+    }
 
     private int _score;
     
@@ -163,6 +187,27 @@ public class GameBehavior : MonoBehaviour
         Score++;
     }
 
+    public void PlayerCollectedWaffle()
+    {
+        _hasWaffle = true;
+        _waffleIcon.sprite = _wholeWaffle;
+        _waffleIcon.gameObject.SetActive(true);
+
+        Debug.Log("Waffle collected!");
+    }
+
+    private IEnumerator EatWaffleAnimation()
+    {
+        _waffleIcon.sprite = _oneBiteWaffle;
+        yield return new WaitForSeconds(0.08f);
+
+        _waffleIcon.sprite = _twoBiteWaffle;
+        yield return new WaitForSeconds(0.08f);
+
+        _waffleIcon.gameObject.SetActive(false);
+    }
+
+
     // --------------------------------------------------------------------------------------------- UPDATE 
     public void GameOver()       
     {
@@ -224,6 +269,23 @@ public class GameBehavior : MonoBehaviour
         StartCoroutine(AnimateDialogue());
     }
 
+
+    private IEnumerator AnimateDialogue()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < 6; i++)
+        {
+            _characterImage.sprite = _currentOpen;
+            yield return new WaitForSeconds(0.2f);
+
+            _characterImage.sprite = _currentClosed;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        _characterImage.sprite = _currentClosed;
+    }
+
 // --------------------------------------------------------------------------------------------- COROUTINES
 
     public IEnumerator GameOverAfterFenceHit()
@@ -248,22 +310,6 @@ public class GameBehavior : MonoBehaviour
         yield return new WaitForSeconds(_skiFenceHit.length);
 
         GameOver();
-    }
-
-    private IEnumerator AnimateDialogue()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        for (int i = 0; i < 6; i++)
-        {
-            _characterImage.sprite = _currentOpen;
-            yield return new WaitForSeconds(0.2f);
-
-            _characterImage.sprite = _currentClosed;
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        _characterImage.sprite = _currentClosed;
     }
 
 // --------------------------------------------------------------------------------------------- END BRACKET

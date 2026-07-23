@@ -3,8 +3,8 @@ using UnityEngine;
 public class WaffleBehavior : MonoBehaviour
 {
     [SerializeField] private float _speed = 5f;
-
     private float _leftEdge;
+
 
     private void Start()
     {
@@ -29,7 +29,7 @@ public class WaffleBehavior : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
-        Debug.Log("Collected Waffle!");
+        GameBehavior.Instance.PlayerCollectedWaffle();
 
         Destroy(gameObject);
     }

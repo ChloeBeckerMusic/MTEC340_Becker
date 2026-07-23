@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -22,19 +23,9 @@ public class Player : MonoBehaviour
    
     [SerializeField] private float _normalSpeed = 5f;
     [SerializeField] private float _waffleSpeed = 7f;
+    private bool _isInvincible = false;
 
-    public bool HasWaffle { get; private set; }
-    public void GiveWaffle()
-    {
-        HasWaffle = true;
-    }
-
-    public void ConsumeWaffle()
-    {
-        HasWaffle = false;
-    }
-
-
+    
     private Rigidbody2D _rb;
     private AudioSource _source; // this is the regular audio source
     [SerializeField] private AudioSource _audioSource;    // this is the one for the coroutine
@@ -175,6 +166,9 @@ private void AnimateSprite()
 
     private void OnTriggerEnter2D(Collider2D other)     // these are the sounds before reset game
     {
+        if (_isInvincible)
+            return;                                    
+        
         if (other.gameObject.CompareTag("ScoreArea"))  // while playing: ping!
         {
             _source.clip = _scoreArea;
@@ -184,6 +178,13 @@ private void AnimateSprite()
         
         if (other.CompareTag("SkiFence"))             // losing SFX-- this is going to be a longer sound effect
         {
+            if (GameBehavior.Instance.UseWaffle())
+            {
+                Debug.Log("Waffle saved you!");
+                StartCoroutine(TemporaryInvincibility(0.75f));
+                return;
+            }
+            
             Debug.Log("You hit the fence!");
             Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterFenceHit());
@@ -191,6 +192,13 @@ private void AnimateSprite()
         }                        
     else if (other.gameObject.CompareTag("Chairlift"))  //angry "hey!!"
         {
+            if (GameBehavior.Instance.UseWaffle())
+            {
+                Debug.Log("Waffle saved you!");
+                StartCoroutine(TemporaryInvincibility(0.75f));
+                return;
+            }
+            
             Debug.Log("You hit the chairlift!");
             Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterChairliftHit());
@@ -198,14 +206,37 @@ private void AnimateSprite()
 
     if (other.gameObject.CompareTag("RockTower"))  // rock crumble 
         {
+            if (GameBehavior.Instance.UseWaffle())
+            {
+                Debug.Log("Waffle saved you!");
+                StartCoroutine(TemporaryInvincibility(0.75f));
+                return;
+            }
+            
             Debug.Log("You hit the rock tower!");
             Die(other.transform);
             StartCoroutine(GameBehavior.Instance.GameOverAfterRockTowerHit());
         }
 
+        if (other.gameObject.CompareTag("OutOfBounds"))  // rock crumble 
+        {
+            Debug.Log("wtf are you doing here bro");
+            GameBehavior.Instance.GameOver();
+        }
+
         _source.pitch = Random.Range(0.9f, 1.1f);
         _source.Play();
 
+    }
+
+
+    private IEnumerator TemporaryInvincibility(float duration)
+    {
+        _isInvincible = true;
+
+        yield return new WaitForSeconds(duration);
+
+        _isInvincible = false;
     }
 
 // --------------------------------------------------------------------------------------------- END BRACKET
