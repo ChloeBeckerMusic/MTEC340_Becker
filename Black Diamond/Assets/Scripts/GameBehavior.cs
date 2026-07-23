@@ -40,7 +40,9 @@ public class GameBehavior : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _skiFenceHit;
     [SerializeField] private AudioClip _waffleEat;
-
+    [SerializeField] private AudioClip _waffleGet;
+    [SerializeField] private AudioClip _chairliftHit;
+    [SerializeField] private AudioClip _rockTowerHit;
 
     [SerializeField] private GameObject _pauseImage;
    
@@ -85,8 +87,6 @@ public class GameBehavior : MonoBehaviour
     [SerializeField] private GameObject _playButtonHome;
     [SerializeField] private GameObject _gameOverButton;
 
-    private int _nextWaffleGate = 21 + 7;
-    private bool _waffleExists = false;
     
     private bool _hasWaffle = false; // does the player have a waffle rn
 
@@ -122,7 +122,6 @@ public class GameBehavior : MonoBehaviour
         { 
             _score = value;      
             _gameplayScoreText.text = "Score: " + _score;
-            _gameOverScoreText.text = "Score: " + _score;
         }
     }
 
@@ -132,23 +131,12 @@ public class GameBehavior : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
             Instance = this;
-            Debug.Log("New instance initialized...");
-    
-            DontDestroyOnLoad(gameObject);
-        }
-    
-        else
-        {
-                Destroy(gameObject);
-        }
     }
     // --------------------------------------------------------------------------------------------- UPDATE
     private void Start()      
     {
-        _audioSource = GetComponent<AudioSource>();
+        // _audioSource = GetComponent<AudioSource>();   // overkill
         
         _dialogueImageLong.gameObject.SetActive(false);
         _dialogueImageShort.gameObject.SetActive(false);
@@ -329,7 +317,7 @@ public class GameBehavior : MonoBehaviour
 
     public IEnumerator GameOverAfterChairliftHit()
     {
-        _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
+        _audioSource.PlayOneShot(_chairliftHit, 0.35f);
         yield return new WaitForSeconds(_skiFenceHit.length);
 
         GameOver();
@@ -337,10 +325,20 @@ public class GameBehavior : MonoBehaviour
 
     public IEnumerator GameOverAfterRockTowerHit()
     {
-        _audioSource.PlayOneShot(_skiFenceHit, 0.35f);
+        _audioSource.PlayOneShot(_rockTowerHit, 1f);
         yield return new WaitForSeconds(_skiFenceHit.length);
 
         GameOver();
+    }
+
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
     }
 
 // --------------------------------------------------------------------------------------------- END BRACKET

@@ -114,13 +114,14 @@ MonoBehaviour:
   - {fileID: -5759004702149497778, guid: 7f1780aecc0ed452881d4164f1dc6102, type: 3}
   - {fileID: -8363646710334599180, guid: c46c83503960b445b9ce1e69654924b9, type: 3}
   _deathSprite: {fileID: -5472358914667958257, guid: c194d365c66314664a6608cb632d23b7, type: 3}
-  Strength: 5
+  _normalStrength: 5
+  _waffleStrength: 7
   Gravity: -9.81
   _audioSource: {fileID: 7394133386810634723}
-  _skiFenceHit: {fileID: 8300000, guid: b3c6419eb23b2400fa66f5208e6442a8, type: 3}
-  _chairliftHit: {fileID: 8300000, guid: b3c6419eb23b2400fa66f5208e6442a8, type: 3}
-  _rockTowerHit: {fileID: 8300000, guid: b3c6419eb23b2400fa66f5208e6442a8, type: 3}
-  _scoreArea: {fileID: 8300000, guid: b3c6419eb23b2400fa66f5208e6442a8, type: 3}
+  _skiFenceHit: {fileID: 8300000, guid: 04c07562cf8ea44129581383b655973c, type: 3}
+  _chairliftHit: {fileID: 8300000, guid: d12a2cdccf4e44185bb48e433bf65c62, type: 3}
+  _rockTowerHit: {fileID: 8300000, guid: 014aab84335ae48f2942716aada52418, type: 3}
+  _scoreArea: {fileID: 8300000, guid: 21b0402c75d5949e798b7f21e5494a6d, type: 3}
 --- !u!58 &278349762644060650
 CircleCollider2D:
   m_ObjectHideFlags: 0

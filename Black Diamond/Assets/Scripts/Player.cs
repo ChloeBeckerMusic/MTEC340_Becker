@@ -27,9 +27,6 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rb;
     private AudioSource _source; // this is the regular audio source
     [SerializeField] private AudioSource _audioSource;    // this is the one for the coroutine
-    [SerializeField] private AudioClip _skiFenceHit; 
-    [SerializeField] private AudioClip _chairliftHit;
-    [SerializeField] private AudioClip _rockTowerHit;
     [SerializeField] private AudioClip _scoreArea;
     
     //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
@@ -71,7 +68,7 @@ public class Player : MonoBehaviour
             if (_driftWithFence)
             {
                 transform.position += Time.deltaTime * 5f * Vector3.left;
-                // 1f is the animation speed, bear with me guys 
+                // 5f is the animation speed, bear with me guys 
             }
             return;
         }
@@ -229,7 +226,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        _source.pitch = Random.Range(0.9f, 1.1f);
+        _source.pitch = Random.Range(0.8f, 1.3f);
         _source.Play();
 
     }

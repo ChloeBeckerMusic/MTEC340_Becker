@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Splash.unity
+    guid: 771d67d4e43bd4bef92cab4733544a8c
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 259c4fba92dfe482281f039886997068
+  - enabled: 1
     path: Assets/Scenes/BlackDiamond.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
