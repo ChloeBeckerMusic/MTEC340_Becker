@@ -7,15 +7,19 @@ public class SplashPlayer : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private int _spriteIndex;
 
+// --------------------------------------------------------------------------------------------- 
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
+// --------------------------------------------------------------------------------------------- 
 
     private void Start()
     {
         InvokeRepeating(nameof(AnimateSprite), 0.15f, 0.15f);
     }
+// --------------------------------------------------------------------------------------------- 
 
     private void AnimateSprite()
     {
@@ -26,4 +30,5 @@ public class SplashPlayer : MonoBehaviour
 
         _spriteRenderer.sprite = _sprites[_spriteIndex];
     }
+// --------------------------------------------------------------------------------------------- END BRACKET
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-
     private AudioSource _audioSource;
+
+// --------------------------------------------------------------------------------------------- 
 
     private void Awake()
     {
@@ -20,6 +21,8 @@ public class AudioManager : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
+// --------------------------------------------------------------------------------------------- 
+
     public void PlayMusic()
     {
         if (_audioSource.isPlaying)
@@ -28,4 +31,5 @@ public class AudioManager : MonoBehaviour
         _audioSource.loop = true;
         _audioSource.Play();
     }
+// --------------------------------------------------------------------------------------------- 
 }

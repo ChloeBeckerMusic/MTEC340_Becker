@@ -15,8 +15,7 @@ public class Spawner : MonoBehaviour
     private bool _waffleExists = false;
     [SerializeField] private WaffleBehavior _wafflePrefab;
 
-//0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-// --------------------------------------------------------------------------------------------- ON ENABLE
+// --------------------------------------------------------------------------------------------- 
 
     private void OnEnable()
     {
@@ -25,7 +24,7 @@ public class Spawner : MonoBehaviour
                                         // how long until you invoke spawn, how many seconds between each spawn
         
     }
-// --------------------------------------------------------------------------------------------- ON DISABLE
+// --------------------------------------------------------------------------------------------- 
 
     private void OnDisable()
     {
@@ -33,7 +32,7 @@ public class Spawner : MonoBehaviour
     }
 
 
-// --------------------------------------------------------------------------------------------- SPAWN
+// --------------------------------------------------------------------------------------------- 
 
 
     private void Spawn()
@@ -45,8 +44,8 @@ public class Spawner : MonoBehaviour
             do
             {
                 randomIndex = Random.Range(0, _prefabs.Length);
-            } while (randomIndex == _lastPrefabIndex); // while recognizes that if there's a duplicate,
-            // it won't go ahead with that one
+            } while (randomIndex == _lastPrefabIndex);              // while recognizes that if there's a duplicate,
+                                                                    // it won't go ahead with that one
 
             _lastPrefabIndex = randomIndex;
 
@@ -59,7 +58,7 @@ public class Spawner : MonoBehaviour
             skiPipes.transform.position += Vector3.up * Random.Range(MinHeight, MaxHeight);
             skiPipes.gap = VerticalGap;
 
-            if (!_waffleExists &&
+            if (!_waffleExists &&                                                      // also waffle if it is "in play" 
                 !GameBehavior.Instance.HasWaffle &&
                 GameBehavior.Instance.Score >= _nextWaffleGate)
             {
@@ -75,7 +74,9 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void SpawnWaffle(SkiPipes skiPipes)
+// --------------------------------------------------------------------------------------------- 
+
+    private void SpawnWaffle(SkiPipes skiPipes)                                     // waffle between ski pipes
     {
         WaffleBehavior waffle = Instantiate(
             _wafflePrefab,
@@ -87,6 +88,8 @@ public class Spawner : MonoBehaviour
         _waffleExists = true;
     }
 
+// --------------------------------------------------------------------------------------------- 
+
     public void WaffleCollected()
     {
         _waffleExists = false;
@@ -94,6 +97,8 @@ public class Spawner : MonoBehaviour
         // Wait 20 gates before another waffle can spawn.
         _nextWaffleGate = GameBehavior.Instance.Score + 20;
     }
+
+// --------------------------------------------------------------------------------------------- 
 
     public void WaffleMissed()
     {
@@ -103,7 +108,10 @@ public class Spawner : MonoBehaviour
         // It already advanced by 7 when this waffle spawned.
     }
 
-    public void ResetSpawner()
+// --------------------------------------------------------------------------------------------- 
+
+    public void ResetSpawner()                                                // these are random vals I chose btw
+                                                                              // (21 and 7)
     {
         _nextWaffleGate = 21;
         _waffleExists = false;

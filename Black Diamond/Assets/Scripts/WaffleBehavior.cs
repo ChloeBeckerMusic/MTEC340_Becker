@@ -6,6 +6,8 @@ public class WaffleBehavior : MonoBehaviour
     private float _leftEdge;
     private Spawner _spawner;
 
+// --------------------------------------------------------------------------------------------- 
+
 
     private void Start()
     {
@@ -14,27 +16,34 @@ public class WaffleBehavior : MonoBehaviour
         _spawner = FindFirstObjectByType<Spawner>();
     }
 
+// --------------------------------------------------------------------------------------------- 
+
     private void Update()
     {
         if (GameBehavior.Instance.State != Utilities.GameState.Play)
             return;
 
-        transform.position += Vector3.left * _speed * Time.deltaTime;
+        transform.position += _speed * Time.deltaTime * Vector3.left;           // be aware of the "inefficient" order
 
         if (transform.position.x < _leftEdge)
         {
             _spawner.WaffleMissed();
-            Destroy(gameObject);
+            Destroy(gameObject);                                             // we don't need that shit anymore
         }
     }
+
+// --------------------------------------------------------------------------------------------- 
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player"))
             return;
-
-        GameBehavior.Instance.PlayerCollectedWaffle();
+                                                                                // sending out the signal
+                                                                                // that player collected the waffle 
+        GameBehavior.Instance.PlayerCollectedWaffle();                  
         _spawner.WaffleCollected();
         Destroy(gameObject);
     }
+
+// --------------------------------------------------------------------------------------------- END BRACKET
 }

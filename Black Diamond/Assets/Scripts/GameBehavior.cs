@@ -5,38 +5,30 @@ using TMPro;
 using UnityEngine.Timeline;
 
 public class GameBehavior : MonoBehaviour
-{
+{                                                                  // ... she's a mammoth, of course
 
     public static GameBehavior Instance;
-
     private Utilities.GameState _state;
 
     public Utilities.GameState State
     {
         get => _state;
-
-        set
+        set                                                                      // setting which images/buttons can be
+                                                                                 // active/inactive when we're in a certain state 
         {
             _state = value;
-
             _playButtonHome.SetActive(State == Utilities.GameState.Menu);
-
             _playButtonGameOver.SetActive(State == Utilities.GameState.GameOver);
-
             _gameOverButton.SetActive(State == Utilities.GameState.GameOver);
-
             _gameOverBackground.SetActive(State == Utilities.GameState.GameOver);
-            
             _pauseImage.SetActive(State == Utilities.GameState.Pause);
-
             _spawner.enabled = State == Utilities.GameState.Play;
-
             _characterImage.gameObject.SetActive(State == Utilities.GameState.GameOver);
-
-
         }
     }
 
+
+    // AUDIO HERE: 
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _skiFenceHit;
     [SerializeField] private AudioClip _waffleEat;
@@ -44,6 +36,8 @@ public class GameBehavior : MonoBehaviour
     [SerializeField] private AudioClip _chairliftHit;
     [SerializeField] private AudioClip _rockTowerHit;
 
+   
+    // UI IMAGES HERE: 
     [SerializeField] private GameObject _pauseImage;
    
     [SerializeField] private Image _dialogueImageLong;
@@ -51,11 +45,16 @@ public class GameBehavior : MonoBehaviour
     [SerializeField] private Image _characterImage;
     [SerializeField] private Image _waffleIcon;
 
+    
+    // SPRITES HERE: 
+
+                       //waffle
     [SerializeField] private Sprite _wholeWaffle;
     [SerializeField] private Sprite _oneBiteWaffle;
     [SerializeField] private Sprite _twoBiteWaffle;
 
 
+                      // dialogue
     private Sprite _currentClosed;
     private Sprite _currentOpen;
 
@@ -76,28 +75,35 @@ public class GameBehavior : MonoBehaviour
     [SerializeField] private Sprite _lilbroDialogue;
 
 
+    // GAME OBJECTS HERE: 
     private GameObject _currentPlayer;
     [SerializeField] public GameObject _playerPrefab;
-    [SerializeField] private TextMeshProUGUI _gameplayScoreText;
-    [SerializeField] private TextMeshProUGUI _gameOverScoreText;
-    [SerializeField] private GameObject _gameOverBackground;
 
-    [SerializeField] private Spawner _spawner;
+    [SerializeField] private GameObject _gameOverBackground;
     [SerializeField] private GameObject _playButtonGameOver;
     [SerializeField] private GameObject _playButtonHome;
     [SerializeField] private GameObject _gameOverButton;
 
-    
-    private bool _hasWaffle = false; // does the player have a waffle rn
 
-    public bool HasWaffle => _hasWaffle;
+    // TEXT: 
+    [SerializeField] private TextMeshProUGUI _gameplayScoreText;
+    [SerializeField] private TextMeshProUGUI _gameOverScoreText;
+
+
+    
+    // WOULD YOU BELIEVE IT?? MORE WAFFLE. 
+    [SerializeField] private Spawner _spawner;
+    
+    private bool _hasWaffle = false; // does the player have a waffle rn?
+
+    public bool HasWaffle => _hasWaffle;   // if someone asks for HasWaffle, give them the value of _hasWaffle
 
     public bool UseWaffle()
     {
         if (!_hasWaffle)
             return false;
       
-        _hasWaffle = false;
+        _hasWaffle = false;                     
        
         Player player = FindFirstObjectByType<Player>();
 
@@ -113,6 +119,9 @@ public class GameBehavior : MonoBehaviour
         return true;
     }
 
+
+    //SCORE: 
+
     private int _score;
     
      public int Score
@@ -125,18 +134,18 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-//0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-
-    // --------------------------------------------------------------------------------------------- UPDATE
+    // --------------------------------------------------------------------------------------------- 
 
     private void Awake()
     {
             Instance = this;
     }
-    // --------------------------------------------------------------------------------------------- UPDATE
+
+    // --------------------------------------------------------------------------------------------- 
+
     private void Start()      
     {
-        // _audioSource = GetComponent<AudioSource>();   // overkill
+        // _audioSource = GetComponent<AudioSource>();   // overkill, but don't forget you can use this
         
         _dialogueImageLong.gameObject.SetActive(false);
         _dialogueImageShort.gameObject.SetActive(false);
@@ -144,7 +153,8 @@ public class GameBehavior : MonoBehaviour
         State = Utilities.GameState.Menu;
     }
 
-// --------------------------------------------------------------------------------------------- UPDATE
+// --------------------------------------------------------------------------------------------- 
+
     public void StartGame()
     {
         _dialogueImageLong.gameObject.SetActive(false);
@@ -163,9 +173,9 @@ public class GameBehavior : MonoBehaviour
 
         State = Utilities.GameState.Play;
 
-
     }
-// --------------------------------------------------------------------------------------------- UPDATE
+
+// --------------------------------------------------------------------------------------------- 
 
     private void Update()
     {
@@ -176,15 +186,15 @@ public class GameBehavior : MonoBehaviour
                 Utilities.GameState.Play;
         }
     }
-
     
-    // --------------------------------------------------------------------------------------------- UPDATE
+    // --------------------------------------------------------------------------------------------- 
     private void SpawnPlayer()     
     {
         _currentPlayer = Instantiate(_playerPrefab);
     }
     
-    // --------------------------------------------------------------------------------------------- UPDATE 
+    // --------------------------------------------------------------------------------------------- 
+
     public void IncreaseScore()
     {
         int points = 1;
@@ -197,7 +207,9 @@ public class GameBehavior : MonoBehaviour
         Score += points;
     }
 
-    public void PlayerCollectedWaffle()
+// --------------------------------------------------------------------------------------------- 
+
+    public void PlayerCollectedWaffle()                                       // Waffle Power up Step 1: collect
     {
         _hasWaffle = true;
 
@@ -215,31 +227,20 @@ public class GameBehavior : MonoBehaviour
         Debug.Log("Waffle collected!");
     }
 
-    private IEnumerator EatWaffleAnimation()
-    {
-        _waffleIcon.sprite = _oneBiteWaffle;
-        yield return new WaitForSeconds(0.25f);
+    // --------------------------------------------------------------------------------------------- 
 
-        _waffleIcon.sprite = _twoBiteWaffle;
-        yield return new WaitForSeconds(0.25f);
-
-        _waffleIcon.gameObject.SetActive(false);
-    }
-
-
-    // --------------------------------------------------------------------------------------------- UPDATE 
     public void GameOver()       
     {
         State = Utilities.GameState.GameOver;
         
         ShowGameOverDialogue();
 
-        if (_currentPlayer != null)
+        if (_currentPlayer != null)                             // DON'T FORGET THIS ONE !!! 
         {
             Destroy(_currentPlayer);
         }
         
-        SkiPipes[] pipes = FindObjectsByType<SkiPipes>(FindObjectsSortMode.None);
+        SkiPipes[] pipes = FindObjectsByType<SkiPipes>(FindObjectsSortMode.None);                // Array! Hurray!
 
         foreach (SkiPipes pipe in pipes)
         {
@@ -247,16 +248,21 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    private void ShowGameOverDialogue()
+// --------------------------------------------------------------------------------------------- 
+                                                                    // there's definitely be a better way to
+                                                                    // do this but since it's a small
+                                                                    // game, it's fine for now
+    private void ShowGameOverDialogue()                                          
     {
-        
         if (Score <= 10)
         {
             _currentClosed = _defaultClosed;
             _currentOpen = _defaultOpen;
             _dialogueImageShort.sprite = _defaultDialogue;
-            _dialogueImageShort.gameObject.SetActive(true);
-            _dialogueImageLong.gameObject.SetActive(false);
+            _dialogueImageShort.gameObject.SetActive(true);                     
+            _dialogueImageLong.gameObject.SetActive(false);                 // I could probably set this up
+                                                                            // in the state machine for future
+                                                                            // chloe reference 
         }
         else if (Score <= 35)
         {
@@ -288,8 +294,15 @@ public class GameBehavior : MonoBehaviour
         StartCoroutine(AnimateDialogue());
     }
 
+// ---------------------------------------------------------------------------------------------   COROUTINES
+                                                                        // important: so you the
+                                                                        // audio doesn't get cut
+                                                                        // off prematurely 
 
-    private IEnumerator AnimateDialogue()
+                                                                        // also helpful for the "speaking" so we can
+                                                                        // wait for the character to finish speaking
+                                                                        // before moving on
+    private IEnumerator AnimateDialogue()                                                  
     {
         yield return new WaitForSeconds(0.5f);
 
@@ -305,7 +318,20 @@ public class GameBehavior : MonoBehaviour
         _characterImage.sprite = _currentClosed;
     }
 
-// --------------------------------------------------------------------------------------------- COROUTINES
+// --------------------------
+
+    private IEnumerator EatWaffleAnimation()
+    {
+        _waffleIcon.sprite = _oneBiteWaffle;
+        yield return new WaitForSeconds(0.25f);
+
+        _waffleIcon.sprite = _twoBiteWaffle;
+        yield return new WaitForSeconds(0.25f);
+
+        _waffleIcon.gameObject.SetActive(false);
+    }
+
+// --------------------------
 
     public IEnumerator GameOverAfterFenceHit()
     {
@@ -331,14 +357,15 @@ public class GameBehavior : MonoBehaviour
         GameOver();
     }
 
+// --------------------------------------------------------------------------------------------- 
 
     public void Quit()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-    Application.Quit();
-#endif
+        #if UNITY_EDITOR                                                       // script is within unity editor
+                UnityEditor.EditorApplication.isPlaying = false;               // have we quit yet? No? QUIT!
+        #else
+            Application.Quit();                                                
+        #endif
     }
 
 // --------------------------------------------------------------------------------------------- END BRACKET

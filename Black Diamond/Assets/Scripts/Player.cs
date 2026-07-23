@@ -28,9 +28,8 @@ public class Player : MonoBehaviour
     private AudioSource _source; // this is the regular audio source
     [SerializeField] private AudioSource _audioSource;    // this is the one for the coroutine
     [SerializeField] private AudioClip _scoreArea;
-    
-    //0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-// --------------------------------------------------------------------------------------------- AWAKE
+
+// --------------------------------------------------------------------------------------------- 
 
  private void Awake()
  {
@@ -40,7 +39,7 @@ public class Player : MonoBehaviour
         _currentStrength = _normalStrength;
  }
  
-// --------------------------------------------------------------------------------------------- START
+// --------------------------------------------------------------------------------------------- 
 
     private void OnEnable()
     {
@@ -52,7 +51,7 @@ public class Player : MonoBehaviour
     }
 
     
-    // --------------------------------------------------------------------------------------------- UPDATE
+// --------------------------------------------------------------------------------------------- 
 
     private void Update()
     {
@@ -92,7 +91,7 @@ public class Player : MonoBehaviour
 
     }
 
-// --------------------------------------------------------------------------------------------- START
+// --------------------------------------------------------------------------------------------- 
 
 
  private void Start()
@@ -107,7 +106,7 @@ public class Player : MonoBehaviour
 
 
 
-// --------------------------------------------------------------------------------------------- ANIMATE SPRITE
+// --------------------------------------------------------------------------------------------- 
     
     private void AnimateSprite()
         {
@@ -163,7 +162,7 @@ public class Player : MonoBehaviour
 
     }
 
-    // ---------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------- 
 
     private void OnTriggerEnter2D(Collider2D other)     // these are the sounds before reset game
     {
@@ -231,6 +230,7 @@ public class Player : MonoBehaviour
 
     }
 
+// --------------------------------------------------------------------------------------------- 
 
     private IEnumerator TemporaryInvincibility(float duration)
     {

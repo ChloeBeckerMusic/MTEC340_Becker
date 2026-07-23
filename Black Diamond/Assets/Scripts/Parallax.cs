@@ -5,8 +5,8 @@ public class Parallax : MonoBehaviour
     private MeshRenderer _meshRenderer;
     public float _animationSpeed = 1f;
 
-//0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000//
-// --------------------------------------------------------------------------------------------- AWAKE
+
+// --------------------------------------------------------------------------------------------- 
 
     private void Awake()
     {
@@ -14,7 +14,7 @@ public class Parallax : MonoBehaviour
                                         // yo the background needs to know your variable 
     }
 
-// --------------------------------------------------------------------------------------------- UPDATE
+// --------------------------------------------------------------------------------------------- 
     private void Update()
     {
         if (GameBehavior.Instance.State == Utilities.GameState.Play)
@@ -23,9 +23,7 @@ public class Parallax : MonoBehaviour
         }
                                         // meshRenderer is talking about the backgroundQuad
                                         // offset is what is moving it right to left
-        
     }
-
 
 // --------------------------------------------------------------------------------------------- END BRACKET
 }
