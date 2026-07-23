@@ -17,7 +17,7 @@ public class GameBehavior : MonoBehaviour
                                                                                  // active/inactive when we're in a certain state 
         {
             _state = value;
-            _playButtonHome.SetActive(State == Utilities.GameState.Menu);
+           // _playButtonHome.SetActive(State == Utilities.GameState.Menu);
             _playButtonGameOver.SetActive(State == Utilities.GameState.GameOver);
             _gameOverButton.SetActive(State == Utilities.GameState.GameOver);
             _gameOverBackground.SetActive(State == Utilities.GameState.GameOver);
@@ -143,22 +143,30 @@ public class GameBehavior : MonoBehaviour
 
     // --------------------------------------------------------------------------------------------- 
 
-    private void Start()      
+    private void Start()
     {
-        // _audioSource = GetComponent<AudioSource>();   // overkill, but don't forget you can use this
-        
         _dialogueImageLong.gameObject.SetActive(false);
         _dialogueImageShort.gameObject.SetActive(false);
 
-        State = Utilities.GameState.Menu;
+        State = Utilities.GameState.Play;
+
+        Score = 0;
+        SpawnPlayer();
     }
 
 // --------------------------------------------------------------------------------------------- 
 
     public void StartGame()
     {
+        State = Utilities.GameState.Play;
+
         _dialogueImageLong.gameObject.SetActive(false);
         _dialogueImageShort.gameObject.SetActive(false);
+
+        if (_currentPlayer != null)
+        {
+            Destroy(_currentPlayer);
+        }
 
         Score = 0;
 
@@ -170,9 +178,6 @@ public class GameBehavior : MonoBehaviour
         }
 
         SpawnPlayer();
-
-        State = Utilities.GameState.Play;
-
     }
 
 // --------------------------------------------------------------------------------------------- 
@@ -188,9 +193,11 @@ public class GameBehavior : MonoBehaviour
     }
     
     // --------------------------------------------------------------------------------------------- 
-    private void SpawnPlayer()     
+    private void SpawnPlayer()
     {
+        Debug.Log("Spawning player...");
         _currentPlayer = Instantiate(_playerPrefab);
+        Debug.Log(_currentPlayer);
     }
     
     // --------------------------------------------------------------------------------------------- 
@@ -361,11 +368,17 @@ public class GameBehavior : MonoBehaviour
 
     public void Quit()
     {
-        #if UNITY_EDITOR                                                       // script is within unity editor
-                UnityEditor.EditorApplication.isPlaying = false;               // have we quit yet? No? QUIT!
-        #else
-            Application.Quit();                                                
-        #endif
+        StartCoroutine(QuitGame());
+    }
+
+    private IEnumerator QuitGame ()
+    {
+        yield return new WaitForSeconds(0.2f);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
 // --------------------------------------------------------------------------------------------- END BRACKET
