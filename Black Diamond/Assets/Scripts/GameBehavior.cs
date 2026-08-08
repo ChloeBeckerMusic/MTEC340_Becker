@@ -13,8 +13,8 @@ public class GameBehavior : MonoBehaviour
     public Utilities.GameState State
     {
         get => _state;
-        set                                                                      // setting which images/buttons can be
-                                                                                 // active/inactive when we're in a certain state 
+        set                       // setting which images/buttons can be active/inactive when we're in a certain state 
+
         {
             _state = value;
            // _playButtonHome.SetActive(State == Utilities.GameState.Menu);
